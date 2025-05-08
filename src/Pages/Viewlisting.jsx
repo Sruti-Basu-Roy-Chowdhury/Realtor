@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Dashboard from "../Components/Dashboard";
-import propertyImage1 from "../assets/images/image1.jpg";
-import propertyImage2 from "../assets/images/image2.jpg";
-import propertyImage3 from "../assets/images/image3.jpg";
+//import propertyImage1 from "../assets/images/image1.jpg";
+//import propertyImage2 from "../assets/images/image2.jpg";
+//import propertyImage3 from "../assets/images/image3.jpg";
 import { useNavigate } from 'react-router-dom';
 import { FiEdit } from "react-icons/fi";
 import { FaEye } from "react-icons/fa";
@@ -18,7 +18,7 @@ const ViewListing = () => {
             price: "₹65 Lakh",
             status: "Available",
             type: "Apartment",
-            image: propertyImage1
+            //image: propertyImage1
         },
         {
             id: 2,
@@ -27,7 +27,7 @@ const ViewListing = () => {
             price: "₹65 Lakh",
             status: "Pending",
             type: "Villa",
-            image: propertyImage2
+            //image: propertyImage2
         },
         {
             id: 3,
@@ -36,7 +36,7 @@ const ViewListing = () => {
             price: "₹65 Lakh",
             status: "Sold",
             type: "Commercial",
-            image: propertyImage3
+            //image: propertyImage3
         }
     ]);
 
