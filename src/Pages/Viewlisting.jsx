@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { FiEdit } from "react-icons/fi";
 import { FaEye } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
+import images from "../assets/images"; // Assuming you have an index.js file exporting all images
+import { Link } from "react-router-dom";
 
 const ViewListing = () => {
     const navigate = useNavigate();
@@ -18,7 +20,7 @@ const ViewListing = () => {
             price: "₹65 Lakh",
             status: "Available",
             type: "Apartment",
-            //image: propertyImage1
+            image: images.propertyImage1
         },
         {
             id: 2,
@@ -27,7 +29,7 @@ const ViewListing = () => {
             price: "₹65 Lakh",
             status: "Pending",
             type: "Villa",
-            //image: propertyImage2
+            image: images.propertyImage2
         },
         {
             id: 3,
@@ -36,7 +38,7 @@ const ViewListing = () => {
             price: "₹65 Lakh",
             status: "Sold",
             type: "Commercial",
-            //image: propertyImage3
+            image: images.propertyImage3
         }
     ]);
 
