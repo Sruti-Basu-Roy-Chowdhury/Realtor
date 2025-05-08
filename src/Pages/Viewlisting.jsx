@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { FiEdit } from "react-icons/fi";
 import { FaEye } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
-import images from "../assets/images"; // Assuming you have an index.js file exporting all images
-import { Link } from "react-router-dom";
+import images from "../assets/Images/images"; // Assuming you have an index.js file exporting all images
+
 
 const ViewListing = () => {
     const navigate = useNavigate();
