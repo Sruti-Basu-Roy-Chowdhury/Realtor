@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Dashboard from "../Components/Dashboard";
 
 const Support = () => {
-    // Sample ticket data with updated status colors and issue descriptions
-    const tickets = [
+    const navigate = useNavigate();
+    const [showCreateTicketModal, setShowCreateTicketModal] = useState(false);
+    const [newTicket, setNewTicket] = useState({
+        userName: "",
+        issue: "",
+        priority: "Medium"
+    });
+    const [tickets, setTickets] = useState([
         {
             id: "TCK-1001",
             userName: "John Doe",
@@ -40,11 +47,63 @@ const Support = () => {
             userInitial: "E",
             issue: "Account login issue"
         }
-    ];
+    ]);
 
     const handleViewDetails = (ticketId) => {
         console.log(`Viewing details for ticket ${ticketId}`);
         alert(`Viewing details for ticket ${ticketId}`);
+    };
+
+    const handleCreateTicketClick = () => {
+        setShowCreateTicketModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowCreateTicketModal(false);
+        setNewTicket({
+            userName: "",
+            issue: "",
+            priority: "Medium"
+        });
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewTicket(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmitTicket = (e) => {
+        e.preventDefault();
+        
+        // Generate a new ticket ID
+        const lastId = tickets.length > 0 ? parseInt(tickets[0].id.split('-')[1]) : 1000;
+        const newId = `TCK-${lastId + 1}`;
+        
+        // Get current date in YYYY-MM-DD format
+        const today = new Date();
+        const date = today.toISOString().split('T')[0];
+        
+        // Create new ticket object
+        const ticketToAdd = {
+            id: newId,
+            userName: newTicket.userName,
+            date: date,
+            status: "Open",
+            statusColor: "bg-red-100 text-red-800",
+            userInitial: newTicket.userName.charAt(0).toUpperCase(),
+            issue: newTicket.issue,
+            priority: newTicket.priority
+        };
+        
+        // Add the new ticket to the beginning of the tickets array
+        setTickets(prevTickets => [ticketToAdd, ...prevTickets]);
+        
+        // Close the modal and reset the form
+        handleCloseModal();
+        alert(`Ticket created for ${newTicket.userName}`);
     };
 
     return (
@@ -68,7 +127,7 @@ const Support = () => {
                     </div>
                 </div>
 
-                {/* Property Listings section */}
+                {/* Support Center section */}
                 <div className="flex justify-between items-start mb-6 mt-10">
                     <div>
                         <h2 className="text-xl font-semibold">Support Center</h2>
@@ -76,7 +135,10 @@ const Support = () => {
                             Handle and resolve support requests raised by property clients
                         </p>
                     </div>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+                    <button 
+                        onClick={handleCreateTicketClick}
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                    >
                         + Create Ticket
                     </button>
                 </div>
@@ -98,7 +160,6 @@ const Support = () => {
                                 <span className="font-semibold text-gray-700">#{ticket.id}</span>
                             </div>
                             
-                            {/* Added issue description paragraph */}
                             <p className="mt-3 text-gray-700 pl-13">
                                 {ticket.issue}
                             </p>
@@ -119,6 +180,91 @@ const Support = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* Create Ticket Modal */}
+                {showCreateTicketModal && (
+                    <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-lg font-semibold">Create New Ticket</h3>
+                                <button 
+                                    onClick={handleCloseModal}
+                                    className="text-gray-500 hover:text-gray-700"
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <form onSubmit={handleSubmitTicket}>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="userName">
+                                        Client Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="userName"
+                                        name="userName"
+                                        value={newTicket.userName}
+                                        onChange={handleInputChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                                
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="issue">
+                                        Issue Description
+                                    </label>
+                                    <textarea
+                                        id="issue"
+                                        name="issue"
+                                        value={newTicket.issue}
+                                        onChange={handleInputChange}
+                                        rows="4"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        required
+                                    ></textarea>
+                                </div>
+                                
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="priority">
+                                        Priority
+                                    </label>
+                                    <select
+                                        id="priority"
+                                        name="priority"
+                                        value={newTicket.priority}
+                                        onChange={handleInputChange}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
+                                        <option value="Critical">Critical</option>
+                                    </select>
+                                </div>
+                                
+                                <div className="flex justify-end space-x-3">
+                                    <button
+                                        type="button"
+                                        onClick={handleCloseModal}
+                                        className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                    >
+                                        Create Ticket
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
