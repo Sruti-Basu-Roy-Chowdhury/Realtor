@@ -15,6 +15,11 @@ const Source = () => {
         name: '',
         leads: ''
     });
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newSource, setNewSource] = useState({
+        name: '',
+        leads: ''
+    });
 
     const toggleDropdown = (id) => {
         setOpenDropdown(openDropdown === id ? null : id);
@@ -57,29 +62,111 @@ const Source = () => {
         setEditingId(null);
     };
 
+    const handleAddSource = () => {
+        setShowAddModal(true);
+    };
+
+    const handleNewSourceChange = (e) => {
+        const { name, value } = e.target;
+        setNewSource({
+            ...newSource,
+            [name]: name === 'leads' ? parseInt(value) || 0 : value
+        });
+    };
+
+    const handleSubmitNewSource = (e) => {
+        e.preventDefault();
+        const newId = Math.max(...sources.map(s => s.id), 0) + 1;
+        setSources([...sources, {
+            id: newId,
+            name: newSource.name,
+            leads: newSource.leads
+        }]);
+        setNewSource({ name: '', leads: '' });
+        setShowAddModal(false);
+    };
+
+    const handleCloseModal = () => {
+        setShowAddModal(false);
+        setNewSource({ name: '', leads: '' });
+    };
+
     return (
         <div className="bg-gray-50 min-h-screen">
             <Navbar />
             <div className="flex justify-between items-center bg-white rounded-lg shadow-md m-4 p-4">
                 <h1 className="text-2xl font-bold text-blue-500">Add Sources</h1>
+                <button 
+                    onClick={handleAddSource}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                >
+                    Add Source
+                </button>
             </div>
-            
-            {/* Search bar section */}
-            <div className="bg-white rounded-lg shadow-md m-4 p-4">
-                <p className="text-gray-700 mb-2">Search Name</p>
-                <div className="flex items-center">
-                    <input 
-                        type="text" 
-                        placeholder="Enter name to search..."
-                        className="border border-gray-300 rounded-l-md px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button 
-                        className="ml-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2.5 rounded-r-md transition duration-200"
-                    >
-                        Submit
-                    </button>
+
+            {/* Add Source Modal */}
+            {showAddModal && (
+                <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-bold text-blue-500">Add New Source</h2>
+                            <button 
+                                onClick={handleCloseModal}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <form onSubmit={handleSubmitNewSource}>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                                    Source Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={newSource.name}
+                                    onChange={handleNewSourceChange}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="leads">
+                                    Number of Leads
+                                </label>
+                                <input
+                                    type="number"
+                                    id="leads"
+                                    name="leads"
+                                    value={newSource.leads}
+                                    onChange={handleNewSourceChange}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={handleCloseModal}
+                                    className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                                >
+                                    Add Source
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Manage Sources section */}
             <div className="bg-white rounded-lg shadow-md m-4 p-4">
