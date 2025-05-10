@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import Dashboard from "../Components/Dashboard";
-//import propertyImage1 from "../assets/images/image1.jpg";
-//import propertyImage2 from "../assets/images/image2.jpg";
-//import propertyImage3 from "../assets/images/image3.jpg";
 import { useNavigate } from 'react-router-dom';
 import { FiEdit } from "react-icons/fi";
 import { FaEye } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
-import images from "../assets/Images/images"; // Assuming you have an index.js file exporting all images
-
+import images from "../assets/Images/images";
 
 const ViewListing = () => {
+
+
+
+    
     const navigate = useNavigate();
     const [properties, setProperties] = useState([
         {
@@ -39,6 +39,33 @@ const ViewListing = () => {
             status: "Sold",
             type: "Commercial",
             image: images.propertyImage3
+        },
+        {
+            id: 4,
+            title: "2BHK Flat in Salt Lake Sector V",
+            location: "Salt Lake, Kolkata",
+            price: "₹65 Lakh",
+            status: "Sold",
+            type: "Commercial",
+            image: images.propertyImage3
+        },
+        {
+            id: 5,
+            title: "3BHK Flat in New Town",
+            location: "New Town, Kolkata",
+            price: "₹85 Lakh",
+            status: "Available",
+            type: "Apartment",
+            image: images.propertyImage1
+        },
+        {
+            id: 6,
+            title: "4BHK Villa in Rajarhat",
+            location: "Rajarhat, Kolkata",
+            price: "₹1.2 Cr",
+            status: "Pending",
+            type: "Villa",
+            image: images.propertyImage2
         }
     ]);
 
@@ -97,9 +124,9 @@ const ViewListing = () => {
     };
 
     return (
-        <div className="flex">
+        <div className="flex h-screen overflow-hidden">
             <Dashboard />
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-6 overflow-hidden">
                 {/* Top section with user info and add button */}
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center mt-5">
@@ -127,127 +154,131 @@ const ViewListing = () => {
                     </button>
                 </div>
 
-                {/* Property Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-                    {properties.map(property => (
-                        <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                            <div className="h-40 bg-gray-200 overflow-hidden">
-                                {editingId === property.id ? (
-                                    <div className="p-2">
-                                        <input 
-                                            type="file" 
-                                            accept="image/*" 
-                                            onChange={handleImageChange}
-                                            className="w-full text-sm"
-                                        />
-                                    </div>
-                                ) : (
-                                    <img src={property.image} alt="Property" className="w-full h-full object-cover" />
-                                )}
-                            </div>
-                            <div className="p-4">
-                                {editingId === property.id ? (
-                                    <>
-                                        <input
-                                            type="text"
-                                            name="title"
-                                            value={editedProperty.title}
-                                            onChange={handleChange}
-                                            className="w-full p-1 mb-2 border rounded"
-                                        />
-                                        <input
-                                            type="text"
-                                            name="location"
-                                            value={editedProperty.location}
-                                            onChange={handleChange}
-                                            className="w-full p-1 mb-2 border rounded"
-                                        />
-                                        <input
-                                            type="text"
-                                            name="price"
-                                            value={editedProperty.price}
-                                            onChange={handleChange}
-                                            className="w-full p-1 mb-2 border rounded"
-                                        />
-                                        <div className="flex justify-between items-center mt-3">
-                                            <select
-                                                name="status"
-                                                value={editedProperty.status}
-                                                onChange={handleChange}
-                                                className="p-1 border rounded"
-                                            >
-                                                <option value="Available">Available</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Sold">Sold</option>
-                                            </select>
-                                            <input
-                                                type="text"
-                                                name="type"
-                                                value={editedProperty.type}
-                                                onChange={handleChange}
-                                                className="p-1 border rounded"
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <h3 className="font-semibold text-lg">{property.title}</h3>
-                                        <p className="text-gray-600 text-sm">{property.location}</p>
-                                        <p className="font-bold mt-2">{property.price}</p>
-                                        <div className="flex justify-between items-center mt-3">
-                                            <div className="flex space-x-2">
-                                                <span className={`${statusColors[property.status]} text-xs px-2 py-1 rounded-full`}>
-                                                    {property.status}
-                                                </span>
+                {/* Horizontal Scrollable Property Cards */}
+                <div className="mt-10 overflow-hidden">
+                    <div className="relative">
+                        <div className="flex overflow-x-auto pb-4 space-x-6 -ml-6 pl-6">
+                            {properties.map(property => (
+                                <div key={property.id} className="flex-shrink-0 w-72 bg-white rounded-lg shadow-md overflow-hidden">
+                                    <div className="h-40 bg-gray-200 overflow-hidden">
+                                        {editingId === property.id ? (
+                                            <div className="p-2">
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*" 
+                                                    onChange={handleImageChange}
+                                                    className="w-full text-sm"
+                                                />
                                             </div>
-                                            <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
-                                                {property.type}
-                                            </span>
+                                        ) : (
+                                            <img src={property.image} alt="Property" className="w-full h-full object-cover" />
+                                        )}
+                                    </div>
+                                    <div className="p-4">
+                                        {editingId === property.id ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    name="title"
+                                                    value={editedProperty.title}
+                                                    onChange={handleChange}
+                                                    className="w-full p-1 mb-2 border rounded"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    name="location"
+                                                    value={editedProperty.location}
+                                                    onChange={handleChange}
+                                                    className="w-full p-1 mb-2 border rounded"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    name="price"
+                                                    value={editedProperty.price}
+                                                    onChange={handleChange}
+                                                    className="w-full p-1 mb-2 border rounded"
+                                                />
+                                                <div className="flex justify-between items-center mt-3">
+                                                    <select
+                                                        name="status"
+                                                        value={editedProperty.status}
+                                                        onChange={handleChange}
+                                                        className="p-1 border rounded"
+                                                    >
+                                                        <option value="Available">Available</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Sold">Sold</option>
+                                                    </select>
+                                                    <input
+                                                        type="text"
+                                                        name="type"
+                                                        value={editedProperty.type}
+                                                        onChange={handleChange}
+                                                        className="p-1 border rounded"
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <h3 className="font-semibold text-lg">{property.title}</h3>
+                                                <p className="text-gray-600 text-sm">{property.location}</p>
+                                                <p className="font-bold mt-2">{property.price}</p>
+                                                <div className="flex justify-between items-center mt-3">
+                                                    <div className="flex space-x-2">
+                                                        <span className={`${statusColors[property.status]} text-xs px-2 py-1 rounded-full`}>
+                                                            {property.status}
+                                                        </span>
+                                                    </div>
+                                                    <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
+                                                        {property.type}
+                                                    </span>
+                                                </div>
+                                            </>
+                                        )}
+                                        <div className="flex justify-between mt-4 pt-3">
+                                            {editingId === property.id ? (
+                                                <>
+                                                    <button 
+                                                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+                                                        onClick={() => handleSave(property.id)}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                    <button 
+                                                        className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm"
+                                                        onClick={handleCancel}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button 
+                                                        className="flex items-center text-blue-500 hover:text-blue-700 text-sm gap-1"
+                                                        onClick={() => navigate(`/property/${property.id}`)}
+                                                    >
+                                                        <FaEye /> View
+                                                    </button>
+                                                    <button 
+                                                        className="flex items-center text-yellow-500 hover:text-yellow-700 text-sm gap-1"
+                                                        onClick={() => handleEdit(property.id)}
+                                                    >
+                                                        <FiEdit /> Edit
+                                                    </button>
+                                                    <button 
+                                                        className="flex items-center text-red-500 hover:text-red-700 text-sm gap-1"
+                                                        onClick={() => handleDelete(property.id)}
+                                                    >
+                                                        <MdDeleteOutline /> Delete
+                                                    </button>
+                                                </>
+                                            )}
                                         </div>
-                                    </>
-                                )}
-                                <div className="flex justify-between mt-4 pt-3">
-                                    {editingId === property.id ? (
-                                        <>
-                                            <button 
-                                                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
-                                                onClick={() => handleSave(property.id)}
-                                            >
-                                                Save
-                                            </button>
-                                            <button 
-                                                className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm"
-                                                onClick={handleCancel}
-                                            >
-                                                Cancel
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <button 
-                                                className="flex items-center text-blue-500 hover:text-blue-700 text-sm gap-1"
-                                                onClick={() => navigate(`/property/${property.id}`)}
-                                            >
-                                                <FaEye /> View
-                                            </button>
-                                            <button 
-                                                className="flex items-center text-yellow-500 hover:text-yellow-700 text-sm gap-1"
-                                                onClick={() => handleEdit(property.id)}
-                                            >
-                                                <FiEdit /> Edit
-                                            </button>
-                                            <button 
-                                                className="flex items-center text-red-500 hover:text-red-700 text-sm gap-1"
-                                                onClick={() => handleDelete(property.id)}
-                                            >
-                                                <MdDeleteOutline /> Delete
-                                            </button>
-                                        </>
-                                    )}
+                                    </div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
                 </div>
             </div>
         </div>
