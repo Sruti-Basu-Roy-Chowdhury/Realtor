@@ -61,9 +61,7 @@ const Clients = () => {
               <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
             </svg>
           </div>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center">
-            <span className="mr-1">+</span> Add New Clients
-          </button>
+          
         </div>
 
         {/* Clients table */}
