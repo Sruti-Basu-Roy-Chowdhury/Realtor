@@ -45,6 +45,11 @@ const Dashboard = () => {
         }
     };
 
+    const handleDashboardClick = () => {
+        navigate('/'); // or any other route you want to navigate to
+        setActiveOption('Clients'); // or whatever default option you want
+    };
+
     const getIconForOption = (option) => {
         switch(option) {
             case 'Clients':
@@ -66,7 +71,10 @@ const Dashboard = () => {
         <div className="flex h-screen">
             {/* Sidebar - fixed on the left with shadow and rounded corners */}
             <div className="w-64 h-full bg-white p-4 fixed left-0 top-5 shadow-lg rounded-r-xl">
-                <div className="mb-6 bg-blue-500 rounded-lg p-4">
+                <div 
+                    className="mb-6 bg-blue-500 rounded-lg p-4 hover:bg-blue-600 cursor-pointer transition-colors"
+                    onClick={handleDashboardClick}
+                >
                     <h2 className="text-xl font-bold text-white">Dashboard</h2>
                 </div>
                 <ul className="space-y-2 mt-10">

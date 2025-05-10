@@ -20,6 +20,8 @@ const Employee = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [employees, setEmployees] = useState(initialEmployeesData);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [editingId, setEditingId] = useState(null);
+    const [editFormData, setEditFormData] = useState({});
     const navigate = useNavigate();
 
     const handleSearch = (e) => {
@@ -40,8 +42,32 @@ const Employee = () => {
     };
 
     const handleEdit = (id) => {
-        navigate(`/employee/edit/${id}`);
+        setEditingId(id);
+        const employeeToEdit = employees.find(emp => emp.id === id);
+        setEditFormData(employeeToEdit);
         setActiveDropdown(null);
+    };
+
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setEditFormData({});
+    };
+
+    const handleSaveEdit = (id) => {
+        const updatedEmployees = employees.map(emp => 
+            emp.id === id ? { ...editFormData } : emp
+        );
+        setEmployees(updatedEmployees);
+        setEditingId(null);
+        setEditFormData({});
+    };
+
+    const handleEditFormChange = (e) => {
+        const { name, value } = e.target;
+        setEditFormData({
+            ...editFormData,
+            [name]: value
+        });
     };
 
     const handleDelete = (id) => {
@@ -105,53 +131,155 @@ const Employee = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {employees.map((employee) => (
                                 <tr key={employee.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{employee.name}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.username}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.password}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.designation}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.allLead}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.visited}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.application}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.mayVisit}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.closed}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative">
-                                        <button 
-                                            onClick={() => toggleDropdown(employee.id)}
-                                            className="text-gray-500 hover:text-gray-700 focus:outline-none"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                                            </svg>
-                                        </button>
-                                        
-                                        {activeDropdown === employee.id && (
-                                            <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-                                                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                                    <button 
-                                                        onClick={() => handleEdit(employee.id)}
-                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                                                        role="menuitem"
-                                                    >
-                                                        Edit
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => handleDelete(employee.id)}
-                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                                                        role="menuitem"
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => handleReview(employee.id)}
-                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                                                        role="menuitem"
-                                                    >
-                                                        Review
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </td>
+                                    {editingId === employee.id ? (
+                                        <>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    value={editFormData.name || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="text"
+                                                    name="username"
+                                                    value={editFormData.username || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="text"
+                                                    name="password"
+                                                    value={editFormData.password || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="text"
+                                                    name="designation"
+                                                    value={editFormData.designation || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="number"
+                                                    name="allLead"
+                                                    value={editFormData.allLead || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="number"
+                                                    name="visited"
+                                                    value={editFormData.visited || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="number"
+                                                    name="application"
+                                                    value={editFormData.application || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="number"
+                                                    name="mayVisit"
+                                                    value={editFormData.mayVisit || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <input
+                                                    type="number"
+                                                    name="closed"
+                                                    value={editFormData.closed || ''}
+                                                    onChange={handleEditFormChange}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap flex space-x-2">
+                                                <button 
+                                                    onClick={() => handleSaveEdit(employee.id)}
+                                                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
+                                                >
+                                                    Save
+                                                </button>
+                                                <button 
+                                                    onClick={handleCancelEdit}
+                                                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{employee.name}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.username}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.password}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.designation}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.allLead}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.visited}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.application}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.mayVisit}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{employee.closed}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative">
+                                                <button 
+                                                    onClick={() => toggleDropdown(employee.id)}
+                                                    className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                                    </svg>
+                                                </button>
+                                                
+                                                {activeDropdown === employee.id && (
+                                                    <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                                                        <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                                            <button 
+                                                                onClick={() => handleEdit(employee.id)}
+                                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                                                                role="menuitem"
+                                                            >
+                                                                Edit
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => handleDelete(employee.id)}
+                                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                                                                role="menuitem"
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => handleReview(employee.id)}
+                                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                                                                role="menuitem"
+                                                            >
+                                                                Review
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </td>
+                                        </>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>
